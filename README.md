@@ -1,3 +1,9 @@
+PERSONAL TRAINER UI
+This is an assignment for "Front-End Developent" course at Haaga-Helia University of Applied Sciences. 
+
+
+<hr>
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
