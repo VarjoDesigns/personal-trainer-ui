@@ -1,4 +1,4 @@
-PERSONAL TRAINER UI
+PERSONAL TRAINER UI <br>
 This is an assignment for "Front-End Developent" course at Haaga-Helia University of Applied Sciences. 
 
 
