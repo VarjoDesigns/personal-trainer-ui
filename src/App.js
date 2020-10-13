@@ -6,7 +6,6 @@ import Customers from './components/pages/Customers';
 function App() {
   return (
     <div className="App">
-      <Home />
       <Customers />
     </div>
   );

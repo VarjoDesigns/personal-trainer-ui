@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import ReactTable from 'react-table';
-import 'react-table/react-table.css';
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-material.css';
 
 export default function Customers() {
 
@@ -30,47 +31,30 @@ export default function Customers() {
 
 
 
-    // REACT TABLES
+    // AG GRID - Ag Grid column definitions
     const columns = [
-        {
-            Header: 'First name',
-            accessor: 'firstname'
-        },
-        {
-            Header: 'Last name',
-            accessor: 'lastname'
-        },
-        {
-            Header: 'Street address',
-            accessor: 'streetaddress'
-        },
-        {
-            Header: 'Postcode',
-            accessor: 'postcode'
-        },
-        {
-            Header: 'City',
-            accessor: 'city'
-        },
-        {
-            Header: 'Email',
-            accessor: 'email'
-        },
-        {
-            Header: 'Phone',
-            accessor: 'phone'
-        }
+        { HeaderName: "First name", field: 'firstname', sortable: 'true'},
+        { HeaderName: "Last name", field: 'lastname', sortable: 'true' },
+        { HeaderName: "Street Address", field: 'streetaddress', sortable: 'true' },
+        { HeaderName: "Postcode", field: 'postcode', sortable: 'true' },
+        { HeaderName: "City", field: 'city', sortable: 'true' },
+        { HeaderName: "Email", field: 'email', sortable: 'true' },
     ]
 
     return(
         <div>
-            <h1>Customers</h1>
-            <ReactTable
-                filterable={true}
-                data={customers}
-                columns={columns}
-                defaultPageSize={50}
-            />
+            <div className="jumbotron jumbotron-fluid">
+                <div className="container">
+                    <h1 className="display-4">Customers</h1>
+                    <p className="lead">Display all Customers</p>
+                </div>
+            </div>
+            <div className="ag-theme-material" style={{height: '700px', width: '80%', margin: 'auto'}}>
+                <AgGridReact
+                    columnDefs={columns}
+                    rowData={customers}
+                />
+            </div>
         </div>
     )
 }
