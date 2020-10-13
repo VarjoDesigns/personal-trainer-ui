@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
+import { GridApi, PropertyKeys } from 'ag-grid-community';
 
 export default function Trainings() {
 
@@ -9,6 +10,8 @@ export default function Trainings() {
     useEffect(() => {
         getTrainings();
     }, []);
+
+    const gridRef = useRef();
 
     // Let's first define the parameters we'll be using
 
@@ -27,7 +30,11 @@ export default function Trainings() {
         .then(data => setTrainings(data))
     }
 
-
+        // Get the updated list
+    
+    const buttonClick = (e) => {
+        console.log("eh");
+    } 
 
     // AG GRID - Ag Grid column definitions
     const columns = [
@@ -44,6 +51,16 @@ export default function Trainings() {
                 )
             }
         },
+        { 
+            headerName: "Delete", 
+            cellRenderer: function(params) {
+                return (
+                    params.data.id
+                )
+            },
+            sortable: false, 
+            filter: false, 
+        },
 
     ]
 
@@ -55,10 +72,17 @@ export default function Trainings() {
                     <p className="lead">Display all Workouts</p>
                 </div>
             </div>
+            <div className="Buttons">
+                <button className="btn btn-outline-danger"  onClick={buttonClick}>Delete</button>
+            </div>
             <div className="ag-theme-material" style={{height: '700px', width: '80%', margin: 'auto'}}>
                 <AgGridReact
                     columnDefs={columns}
                     rowData={trainings}
+                    animateRows={true}
+                    ref={gridRef}
+                    onGridReady={ params => gridRef.current = params.api }
+                    rowSelection="single"
                 />
             </div>
         </div>

@@ -7,8 +7,8 @@ import Trainings from './components/pages/Trainings';
 function App() {
   return (
     <div className="App">
-      <Customers />
       <Trainings />
+      <Customers />
     </div>
   );
 }

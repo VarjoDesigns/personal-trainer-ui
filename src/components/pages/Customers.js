@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-material.css';
+
+import ReactTable from 'react-table';
+import 'react-table/react-table.css';
+import './Customers.css';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Snackbar from '@material-ui/core/Snackbar';
 
 export default function Customers() {
 
@@ -27,17 +32,70 @@ export default function Customers() {
         .then(data => setCustomers(data.content))
     }
 
+    // DELETE FUNCTION
+
+    const deleteCustomer = (link) => {
+        console.log("It seems that you are looking to delete the customer. Are you sure?")
+        if (window.confirm("Are you sure? This can't be reversed!")){
+          // If true, let's run delete!
+          console.log("Let's delete that customer! Soon it'll be but a memory! Customer ID was: " + link);
+          // Let's delete that customer! Soon it'll be but a memory!
+          fetch(link, {method: 'DELETE'})
+          .then(response => getCustomers())
+          .catch(error => console.error(error))
+          
+          // Let's use the snackbar to show the customer was deleted...
+          setMessage('Customer deleted');
+          setOpen('true');
+  
+          
+        }
+       // If the user doesn't confirm, we'll do nothing at all
+      }
 
 
-    // AG GRID - Ag Grid column definitions
+
+   // TABLE COLUMNS
     const columns = [
-        { headerName: "First name", field: 'firstname', sortable: true },
-        { headerName: "Last name", field: 'lastname', sortable: true },
-        { headerName: "Street Address", field: 'streetaddress', sortable: true },
-        { headerName: "Postcode", field: 'postcode', sortable: true },
-        { headerName: "City", field: 'city', sortable: true },
-        { headerName: "Email", field: 'email', sortable: true },
+        { Header: "First name", accessor: 'firstname', sortable: true },
+        { Header: "Last name", accessor: 'lastname', sortable: true },
+        { Header: "Street Address", accessor: 'streetaddress', sortable: true },
+        { Header: "Postcode", accessor: 'postcode', sortable: true },
+        { Header: "City", accessor: 'city', sortable: true },
+        { Header: "Email", accessor: 'email', sortable: true },
+        { // Edit Customers
+            Header: 'Edit',
+            sortable: false,
+            filterable: false,
+            width: 80,
+            /* Cell: row => (
+              <EditCustomer 
+              customer={row.original} 
+              updateCustomer={updateCustomer} />) */
+          },
+          { // Let's add a button for deleting rows
+          Header: 'Delete',
+          accessor: 'links[0].href',
+          Cell: row => 
+              <IconButton 
+                startIcon={<DeleteIcon />}
+                variant="contained" 
+                color="secondary" 
+                onClick={() => deleteCustomer(row.value)} 
+                ><DeleteIcon />
+              </IconButton>, // row.value acesses the value of the cell, and it's being sent to the delete function
+          sortable: false,
+          filterable: false,
+          width: 80
+        }
     ]
+
+
+    const handleClose = () => {
+        setOpen(false);
+      }
+
+    // RETURN FOR RENDER
 
     return(
         <div>
@@ -48,10 +106,8 @@ export default function Customers() {
                 </div>
             </div>
             <div className="ag-theme-material" style={{height: '700px', width: '80%', margin: 'auto'}}>
-                <AgGridReact
-                    columnDefs={columns}
-                    rowData={customers}
-                />
+                <ReactTable className="ReactTable" filterable={true} data={customers}  columns={columns} defaultPageSize={15} />
+                <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} message={message} />
             </div>
         </div>
     )
